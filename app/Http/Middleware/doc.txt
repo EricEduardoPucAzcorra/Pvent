@@ -1,0 +1,48 @@
+1- creo los middlewares php artiisan make:middleware Nombre
+2- Declarar los middlewares en el archivo kernel
+->  protected $routeMiddleware = [
+        'auth' => \App\Http\Middleware\Authenticate::class,
+        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'Administrador' => \App\Http\Middleware\Administrador::class,
+        'Vendedor' => \App\Http\Middleware\Vendedor::class,
+        'Almacenero' => \App\Http\Middleware\Almacenero::class
+    ];
+
+3- ir a web.php arcihvo routes
+-> creo un grupo middleware
+Route::middleware(['web'])->group(function () {
+    //
+});
+acomodar los grupos de middleware
+
+4- Configurar plantilla blade
+validando 
+{{-- valido usuario  si esta autenticado--}}
+            @if (Auth::check())
+                {{-- autenticado como Administrador --}}
+                @if(Auth::user()->id_rol==1)
+
+                @include('layout.menuAdmin')
+                 {{-- autenticado como Vendedor--}}
+                @elseif(Auth::user()->id_rol==2)
+
+                @include('layout.menuVendedor')
+                 {{-- autenticado como Almacenero --}}
+                @elseif(Auth::user()->id_rol==3)
+                
+                @include('layout.menuAlmacenero')
+                
+                @else
+
+                @endif
+
+@endif
+
+5. cambiar ruta en RedirectIfAuthenticated.php
